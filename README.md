@@ -32,6 +32,7 @@
 
 <!-- * [![Next][Next.js]][Next-url] -->
 * [![Node][Node.js]][React-url]
+* [![Express][Express.js]][React-url]
 <!-- * [![Vue][Vue.js]][Vue-url] -->
 <!-- * [![Angular][Angular.io]][Angular-url] -->
 <!-- * [![Svelte][Svelte.dev]][Svelte-url] -->
@@ -122,6 +123,8 @@ Don't forget to give the project a star! Thanks again!
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: https://raw.githubusercontent.com/Muhammad-Zain01/url-shortner-backend/main/preview.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+
+[Express.js]: https://img.shields.io/badge/express.js-f1dd1c?style=for-the-badge
 [Node.js]: https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-4A4A55?style=for-the-badge&logo=react&logoColor=white
