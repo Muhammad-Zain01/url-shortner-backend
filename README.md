@@ -122,7 +122,7 @@ Don't forget to give the project a star! Thanks again!
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: https://raw.githubusercontent.com/Muhammad-Zain01/url-shortner-backend/main/preview.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Node.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nodedotjs&logoColor=white
+[Node.js]: https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-4A4A55?style=for-the-badge&logo=react&logoColor=white
 [React-url]: https://reactjs.org/
