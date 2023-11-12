@@ -9,7 +9,7 @@ let ID = 1;
 const getUrlData = (keyword) => {
     const result = URL_DATABASE.filter(item => item.keyword == keyword);
     if (result.length) {
-        return { url: result.url }
+        return { url: result[0].url }
     }
     return false;
 }

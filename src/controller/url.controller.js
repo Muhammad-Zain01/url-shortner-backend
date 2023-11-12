@@ -1,6 +1,12 @@
+const { getUrlData } = require('../model/url.model')
+
 function getURL(req, res) {
     const keyword = req.params.keyword
-    // WORKING
+    const result = getUrlData(keyword);
+    if(result){
+        return res.status(200).json({...result, status: 200});
+    }
+    return res.status(404).json({status: 404, message: 'Page Not Found'});
 }
 
 function saveURL(req, res) {
