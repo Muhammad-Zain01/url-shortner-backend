@@ -2,7 +2,7 @@ const express = require('express');
 const UrlController = require('./controller/url.controller')
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8000;
 
 app.use(express.json())
 
