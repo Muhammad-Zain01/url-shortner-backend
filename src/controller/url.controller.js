@@ -1,17 +1,24 @@
-const { getUrlData } = require('../model/url.model')
+const { getUrlData, saveUrlData, getAllData } = require('../model/url.model')
 
+function getAllURL(req, res) {
+    res.json(getAllData())
+}
 function getURL(req, res) {
     const keyword = req.params.keyword
     const result = getUrlData(keyword);
-    if(result){
-        return res.status(200).json({...result, status: 200});
+    if (result) {
+        return res.status(200).json({ ...result, status: 200 });
     }
-    return res.status(404).json({status: 404, message: 'Page Not Found'});
+    return res.status(404).json({ status: 404, message: 'Page Not Found' });
 }
 
 function saveURL(req, res) {
     const body = req.body
-    // WORKING
+    if (body.url) {
+        saveUrlData(body.url)
+        return res.status(200).json({ status: 200, message: 'URL has been saved Successfully' })
+    }
+    res.status(404).json({ status: 404, message: 'Url Not Found' })
 }
 function updateURL(req, res) {
     const body = req.body
@@ -26,5 +33,6 @@ module.exports = {
     getURL,
     saveURL,
     updateURL,
-    removeURL
+    removeURL,
+    getAllURL
 }
