@@ -24,9 +24,5 @@ function saveUrlData(url) {
     URL_DATABASE.push({ id: ID, keyword, url: url })
     return true;
 }
-function updateUrlData(keyword, url){
-
-}
-
 
 module.exports = { getUrlData, saveUrlData, getAllData }
