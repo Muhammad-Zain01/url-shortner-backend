@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/Muhammad-Zain01/url-shortner-backend#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mongodb": "^6.2.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
