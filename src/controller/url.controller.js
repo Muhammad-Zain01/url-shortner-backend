@@ -1,5 +1,5 @@
 const { getUrlData, saveUrlData, getAllData } = require('../model/url.model')
-
+const URL_DATABASE = []
 function getAllURL(req, res) {
     res.json(getAllData())
 }

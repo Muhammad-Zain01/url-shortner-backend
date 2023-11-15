@@ -6,7 +6,6 @@ class Database {
         this.uri = process.env.MONGO_DB_URL;
         this.dbConnection = false;
         this.db = 'ShortnerDB';
-        this.collection = 'ShortnerCollection';
         this.client = new MongoClient(this.uri, {
             serverApi: {
                 version: ServerApiVersion.v1,
@@ -77,4 +76,6 @@ class Database {
     }
 }
 
-module.exports = Database;
+const DBInstance = new Database();
+DBInstance.connect();
+module.exports = DBInstance;
