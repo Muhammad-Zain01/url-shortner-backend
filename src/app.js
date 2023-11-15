@@ -6,6 +6,7 @@ app.use(express.json())
 
 app.get('/', UrlController.getAllURL)
 app.get('/:keyword', UrlController.getURL)
+app.post('/events', UrlController.saveURL)
 app.post('/events/save', UrlController.saveURL)
 app.put('/events/update/:keyword', UrlController.updateURL)
 app.delete('/events/remove/:keyword', UrlController.removeURL)
