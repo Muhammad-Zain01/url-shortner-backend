@@ -13,7 +13,7 @@ class Database {
                 strict: true,
                 deprecationErrors: true,
             }
-        });;
+        });
     }
     async connect() {
         await this.client.connect();
