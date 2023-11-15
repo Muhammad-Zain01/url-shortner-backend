@@ -40,17 +40,23 @@ class Database {
         }
         return false;
     }
-    async remove(collection){
+    async remove(collection) {
         if (this.dbConnection) {
             const DocSnap = await this.dbConnection.collection(collection);
-            const removeOne = (query) => { return DocSnap.deleteOne(query)}
-            const removeMany = (query) => {return DocSnap.deleteMany(query)}
+            const removeOne = (query) => { return DocSnap.deleteOne(query) }
+            const removeMany = (query) => { return DocSnap.deleteMany(query) }
             return { removeOne, removeMany }
         }
         return false;
     }
-    async update(){
-
+    async update(collection) {
+        if (this.dbConnection) {
+            const DocSnap = await this.dbConnection.collection(collection);
+            const updateOne = (query, data) => { return DocSnap.updateOne(query, data) }
+            const updateMany = (query, data) => { return DocSnap.updateMany(query, data) }
+            return { updateOne, updateMany }
+        }
+        return false
     }
 }
 
