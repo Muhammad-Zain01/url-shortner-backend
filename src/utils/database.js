@@ -21,9 +21,11 @@ class Database {
         return true
     }
     async disconnect() {
-        await this.client.close();
-        this.dbConnection = false;
-        return true
+        if (this.dbConnection) {
+            await this.client.close();
+            this.dbConnection = false;
+        }
+        return true;
     }
     async getData(collection) {
         if (this.dbConnection) {
