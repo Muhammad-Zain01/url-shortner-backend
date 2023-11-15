@@ -43,27 +43,27 @@ class Database {
     async remove(collection) {
         if (this.dbConnection) {
             const DocSnap = await this.dbConnection.collection(collection);
-            const removeOne = (query) => { return DocSnap.deleteOne(query) }
-            const removeMany = (query) => { return DocSnap.deleteMany(query) }
-            return { removeOne, removeMany }
+            const One = (query) => { return DocSnap.deleteOne(query) }
+            const Many = (query) => { return DocSnap.deleteMany(query) }
+            return { One, Many }
         }
         return false;
     }
     async update(collection) {
         if (this.dbConnection) {
             const DocSnap = await this.dbConnection.collection(collection);
-            const updateOne = (query, data) => { return DocSnap.updateOne(query, data) }
-            const updateMany = (query, data) => { return DocSnap.updateMany(query, data) }
-            return { updateOne, updateMany }
+            const One = (query, data) => { return DocSnap.updateOne(query, data) }
+            const Many = (query, data) => { return DocSnap.updateMany(query, data) }
+            return { One, Many }
         }
         return false
     }
     async addDocument(collection){
         if (this.dbConnection) {
             const DocSnap = await this.dbConnection.collection(collection);
-            const addOne = (data) => { return DocSnap.insertOne(data) }
-            const addMany = (data) => { return DocSnap.insertMany(data) }
-            return { addOne, addMany }
+            const One = (data) => { return DocSnap.insertOne(data) }
+            const Many = (data) => { return DocSnap.insertMany(data) }
+            return { One, Many }
         }
         return false
     }
