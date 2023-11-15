@@ -67,6 +67,12 @@ class Database {
         }
         return false
     }
+    async addCollection(collection){
+        if (this.dbConnection) {
+            return await this.dbConnection.createCollection(collection);
+        }
+        return false
+    }
 }
 
 module.exports = Database;
