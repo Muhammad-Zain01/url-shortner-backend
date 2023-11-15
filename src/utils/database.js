@@ -1,8 +1,9 @@
 const { MongoClient, ServerApiVersion } = require('mongodb')
+require('dotenv').config()
 
 class Database {
     constructor() {
-        this.uri = 'mongodb+srv://zainverge:Ii9M7mZve6E0GpUp@cluster0.og8sax5.mongodb.net/?retryWrites=true&w=majority';
+        this.uri = process.env.MONGO_DB_URL;
         this.dbConnection = false;
         this.db = 'ShortnerDB';
         this.collection = 'ShortnerCollection';
@@ -19,12 +20,37 @@ class Database {
         this.dbConnection = this.client.db(this.db)
         return true
     }
-    async getDocs() {
-        
+    async disconnect() {
+        await this.client.close();
+        this.dbConnection = false;
+        return true
+    }
+    async getData(collection) {
         if (this.dbConnection) {
-            const collection = this.dbConnection.collection(this.collection);
-            console.log(await collection.getDocuments());
+            const DocSnap = await this.dbConnection.collection(collection);
+            let findObject = {}
+            const result = async () => {
+                return await DocSnap.find(findObject).toArray();
+            }
+            const where = (obj) => {
+                findObject = obj;
+                return result();
+            }
+            return { result, where }
         }
+        return false;
+    }
+    async remove(collection){
+        if (this.dbConnection) {
+            const DocSnap = await this.dbConnection.collection(collection);
+            const removeOne = (query) => { return DocSnap.deleteOne(query)}
+            const removeMany = (query) => {return DocSnap.deleteMany(query)}
+            return { removeOne, removeMany }
+        }
+        return false;
+    }
+    async update(){
+
     }
 }
 
