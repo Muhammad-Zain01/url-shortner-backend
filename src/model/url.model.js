@@ -1,14 +1,5 @@
 const { makeKeyword } = require('../utils/helper')
 
-let URL_DATABASE = [
-    {
-        id: 0,
-        keyword: 'BxkeYl',
-        url: 'www.google.com'
-    }
-]
-let ID = 1;
-
 function getAllData() {
     return URL_DATABASE
 }
