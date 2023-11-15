@@ -58,6 +58,15 @@ class Database {
         }
         return false
     }
+    async addDocument(collection){
+        if (this.dbConnection) {
+            const DocSnap = await this.dbConnection.collection(collection);
+            const addOne = (data) => { return DocSnap.insertOne(data) }
+            const addMany = (data) => { return DocSnap.insertMany(data) }
+            return { addOne, addMany }
+        }
+        return false
+    }
 }
 
 module.exports = Database;
