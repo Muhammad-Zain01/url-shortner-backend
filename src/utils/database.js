@@ -32,8 +32,8 @@ class Database {
             const result = async () => {
                 return await DocSnap.find(findObject).toArray();
             }
-            const where = (obj) => {
-                findObject = obj;
+            const where = (query) => {
+                findObject = query;
                 return result();
             }
             return { result, where }
