@@ -1,24 +1,55 @@
 const { getUrlData, saveUrlData, getAllData } = require('../model/url.model')
+const DBInstance = require('../utils/database')
+const { makeKeyword } = require('../utils/helper')
 const URL_DATABASE = []
 function getAllURL(req, res) {
     res.json(getAllData())
 }
-function getURL(req, res) {
-    const keyword = req.params.keyword
-    const result = getUrlData(keyword);
-    if (result) {
-        return res.status(200).json({ ...result, status: 200 });
+async function getData(req, res) {
+    const body = req.body;
+    const user = body?.user;
+    const doc = await DBInstance.getData('urls');
+    if (doc) {
+        const result = await doc.where({ user: user.username })
+        const data = result.map(item => {
+            return {
+                url: item.url,
+                title: item.title,
+                keyword: item.keyword
+            }
+        })
+        res.json({ status: 1, data })
+        return;
     }
-    return res.status(404).json({ status: 404, message: 'Page Not Found' });
+    res.json({ status: 0 })
+
 }
 
-function saveURL(req, res) {
+async function addURL(req, res) {
     const body = req.body
-    if (body.url) {
-        saveUrlData(body.url)
-        return res.status(200).json({ status: 200, message: 'URL has been saved Successfully' })
+    // const userId = Buffer.from(body?.user?.token, 'base64').toString('hex');
+    const username = body?.user?.username
+    let keyword = body.keyword;
+    if (keyword == "") {
+        keyword = makeKeyword()
     }
-    res.status(404).json({ status: 404, message: 'Url Not Found' })
+    console.log(req.body);
+    const links = {
+        user: username,
+        url: body?.url,
+        title: body?.title,
+        keyword
+    }
+    console.log(links);
+    const doc = await DBInstance.addDocument('urls')
+    if (doc) {
+        const result = await doc.One(links);
+        if (result.acknowledged) {
+            res.json({ status: 1 })
+            return;
+        }
+        res.json({ status: 0 })
+    }
 }
 function updateURL(req, res) {
     const body = req.body
@@ -30,8 +61,8 @@ function removeURL(req, res) {
 }
 
 module.exports = {
-    getURL,
-    saveURL,
+    getData,
+    addURL,
     updateURL,
     removeURL,
     getAllURL
