@@ -17,7 +17,7 @@
     <br />
     <a href="https://muhammad-zain01.github.io/url-shortner-backend/">View Demo</a>
     -
-    <a href="https://github.com/muhammad-zain01/url-shortner-backend/issues">Report Bug</a>
+    <a href="https://github.com/Muhammad-Zain01/url-shortner">Frontend Repo</a>
     -
     <a href="https://github.com/muhammad-zain01/url-shortner-backend/issues">Request Feature</a>
     <br />
