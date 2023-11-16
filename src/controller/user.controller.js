@@ -32,7 +32,6 @@ async function LoginUser(req, res) {
         const response = await DB.where({ username, password })
         if (response.length > 0) {
             const base64String = Buffer.from(response[0]._id.toHexString(), 'hex').toString('base64');
-            // const hexString = Buffer.from(base64String, 'base64').toString('hex');
             res.json({ status: 1, data: { username: response[0].username, token: base64String} })
             return;
         }
