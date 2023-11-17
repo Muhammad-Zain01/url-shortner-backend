@@ -16,7 +16,7 @@ app.post('/events/register', UserController.RegisterUser)
 app.post('/events/login', UserController.LoginUser)
 app.post('/events/add', AuthenticateUser, UrlController.addURL)
 app.post('/events/get-urls', AuthenticateUser, UrlController.getData)
-
+app.post('/capture', UrlController.CaptureUser)
 
 // app.get('/', UrlController.getAllURL)
 // app.get('/:keyword', UrlController.getURL)
