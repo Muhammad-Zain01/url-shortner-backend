@@ -11,6 +11,7 @@ app.use(cors({ origin: 'http://localhost:5173' }))
 
 app.get('/proxy/:url', ProxyMiddleware)
 app.post('/events/verify/:username', UserController.CheckUsername)
+app.post('/events/verify/keyword/:keyword', UserController.VerifyKeyword)
 app.post('/events/register', UserController.RegisterUser)
 app.post('/events/login', UserController.LoginUser)
 app.post('/events/add', AuthenticateUser, UrlController.addURL)
