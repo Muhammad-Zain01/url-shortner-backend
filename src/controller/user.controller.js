@@ -15,7 +15,7 @@ async function RegisterUser(req, res) {
     const username = req.body?.username
     const email = req.body?.email
     const password = req.body?.password
-    const DB = await DATABASE.addDocument('users')
+    const DB = await DATABASE.getData('users')
     if (DB) {
         DB.One({ username, email, password })
         res.json({ status: 1, message: 'User Created Successfully' })
@@ -23,7 +23,16 @@ async function RegisterUser(req, res) {
     }
     res.json({ status: 0, message: 'Something Went Wrong' })
 }
-
+async function VerifyKeyword(req, res) {
+    const keyword = req.params.keyword
+    const DB = await DATABASE.getData('urls')
+    if (DB) {
+        const response = await DB.where({ keyword })
+        res.json({ status: response.length > 0 ? 0 : 1 })
+        return;
+    }
+    res.json({ status: 0 })
+}
 async function LoginUser(req, res) {
     const username = req.body?.username
     const password = req.body?.password
@@ -32,11 +41,11 @@ async function LoginUser(req, res) {
         const response = await DB.where({ username, password })
         if (response.length > 0) {
             const base64String = Buffer.from(response[0]._id.toHexString(), 'hex').toString('base64');
-            res.json({ status: 1, data: { username: response[0].username, token: base64String} })
+            res.json({ status: 1, data: { username: response[0].username, token: base64String } })
             return;
         }
     }
     res.json({ status: 0 })
 }
 
-module.exports = { CheckUsername, RegisterUser, LoginUser }
+module.exports = { CheckUsername, RegisterUser, LoginUser, VerifyKeyword }
