@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Muhammad-Zain01/url-shortner-backend#readme",
   "dependencies": {
+    "axios": "^1.6.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
