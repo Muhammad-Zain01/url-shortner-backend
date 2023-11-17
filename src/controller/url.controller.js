@@ -15,7 +15,8 @@ async function getData(req, res) {
             return {
                 url: item.url,
                 title: item.title,
-                keyword: item.keyword
+                keyword: item.keyword,
+                icon: item.icon
             }
         })
         res.json({ status: 1, data })
@@ -33,12 +34,12 @@ async function addURL(req, res) {
     if (keyword == "") {
         keyword = makeKeyword()
     }
-    console.log(req.body);
     const links = {
         user: username,
         url: body?.url,
         title: body?.title,
-        keyword
+        keyword,
+        icon: body?.icon
     }
     console.log(links);
     const doc = await DBInstance.addDocument('urls')
