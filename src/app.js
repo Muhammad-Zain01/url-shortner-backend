@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const UrlController = require("./controller/url.controller")
-const UserController = require('./controller/user.controller')
+// const UrlController = require("./controller/url.controller")
+// const UserController = require('./controller/user.controller')
+const UrlRouter = require('./router/url.router')
+const UserRouter = require('./router/user.router')
 const AuthenticateUser = require('./middleware/authenticate')
 const ProxyMiddleware = require('./middleware/proxy');
 
@@ -10,6 +12,7 @@ app.use(cors({ origin: 'http://127.0.0.1:5173' }))
 app.use(express.json())
 
 app.get('/proxy/:url', ProxyMiddleware)
+
 app.post('/events/verify/:username', UserController.CheckUsername)
 app.post('/events/verify/keyword/:keyword', UserController.VerifyKeyword)
 app.post('/events/register', UserController.RegisterUser)
