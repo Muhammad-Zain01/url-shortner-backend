@@ -1,5 +1,5 @@
 const express = require('express');
-
+const UrlController = require('../controller/url.controller')
 const UrlRouter = express.Router();
 
 UrlRouter.post('/events/add', AuthenticateUser, UrlController.addURL)
