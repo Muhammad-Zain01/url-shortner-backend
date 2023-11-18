@@ -6,8 +6,8 @@ const UserController = require('./controller/user.controller')
 const AuthenticateUser = require('./middleware/authenticate')
 const ProxyMiddleware = require('./middleware/proxy');
 
+app.use(cors({ origin: 'http://127.0.0.1:5173' }))
 app.use(express.json())
-app.use(cors({ origin: 'http://localhost:5173' }))
 
 app.get('/proxy/:url', ProxyMiddleware)
 app.post('/events/verify/:username', UserController.CheckUsername)
