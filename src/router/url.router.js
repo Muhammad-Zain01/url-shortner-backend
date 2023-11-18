@@ -1,3 +1,9 @@
-app.post('/events/add', AuthenticateUser, UrlController.addURL)
-app.post('/events/get-urls', AuthenticateUser, UrlController.getData)
-app.post('/capture', UrlController.CaptureUser)
+const express = require('express');
+
+const UrlRouter = express.Router();
+
+
+UrlRouter.post('/events/add', AuthenticateUser, UrlController.addURL)
+UrlRouter.post('/events/get-urls', AuthenticateUser, UrlController.getData)
+UrlRouter.post('/capture', UrlController.CaptureUser)
+
