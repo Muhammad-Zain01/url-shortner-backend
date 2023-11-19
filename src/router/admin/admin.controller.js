@@ -1,31 +1,18 @@
+const { getAllUrls, insertUrl, verifyKeyword } = require('../../model/admin.modal')
+
 async function adminGetData(req, res) {
     const body = req.body;
     const user = body?.user;
-    const doc = await DBInstance.getData('urls');
-    if (doc) {
-        const result = await doc.where({ user: user.username })
-        const data = result.map(item => {
-            return {
-                url: item.url,
-                title: item.title,
-                keyword: item.keyword,
-                icon: item.icon
-            }
-        })
-        res.json({ status: 1, data })
-        return;
-    }
-    res.json({ status: 0 })
-
+    const result = await getAllUrls(user);
+    res.json(result)
 }
 async function adminAddURL(req, res) {
     const body = req.body
     // const userId = Buffer.from(body?.user?.token, 'base64').toString('hex');
     const username = body?.user?.username
     let keyword = body.keyword;
-    if (keyword == "") {
-        keyword = makeKeyword()
-    }
+    if (keyword == "") { keyword = makeKeyword() }
+
     const links = {
         user: username,
         url: body?.url,
@@ -33,30 +20,13 @@ async function adminAddURL(req, res) {
         keyword,
         icon: body?.icon
     }
-    console.log(links);
-    const doc = await DBInstance.addDocument('urls')
-    if (doc) {
-        const result = await doc.One(links);
-        if (result.acknowledged) {
-            res.json({ status: 1 })
-            return;
-        }
-        res.json({ status: 0 })
-    }
+    const result = await insertUrl(links);
+    res.json(result);
 }
 async function adminVerifyKeyword(req, res) {
     const keyword = req.params.keyword
-    const DB = await DATABASE.getData('urls')
-    if (DB) {
-        const response = await DB.where({ keyword })
-        if (response.length > 0) {
-            res.json({ status: 0, data: response[0] })
-        } else {
-            res.json({ status: 1 })
-        }
-        return;
-    }
-    res.json({ status: 0 })
+    const result = await verifyKeyword(keyword);
+    res.json(result);
 }
 module.exports = {
     adminGetData,
