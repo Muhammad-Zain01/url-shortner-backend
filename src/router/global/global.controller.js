@@ -1,24 +1,15 @@
 const axios = require('axios');
-
+const { captureUser } = require('../../model/global.model')
 async function globalCaptureUser(req, res) {
     const { deviceInfo, keyword } = req.body;
-    // const userIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const ipResponse = await axios.get('https://api.ipify.org?format=json');
     const userIp = ipResponse.data.ip;
     const locationResponse = await axios.get(`http://ip-api.com/json/${userIp}`);
     const userLocation = locationResponse.data;
     const currentTime = new Date();
     const data = { userIp, userData: { ...deviceInfo, ...userLocation }, time: currentTime, keyword }
-    const DB = await DBInstance.addDocument('webdata')
-    if (DB) {
-        const result = await DB.One(data)
-        console.log(result);
-        if (result.acknowledged) {
-            res.json({ status: 1 })
-            return;
-        }
-    }
-    res.json({ status: 0 })
+    const result = captureUser(data)
+    res.json(result);
 }
 
 async function globalProxyMiddleware(req, res) {
