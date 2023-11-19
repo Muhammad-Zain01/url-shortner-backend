@@ -15,14 +15,18 @@ class Database {
         });
     }
     async connect() {
-        await this.client.connect();
-        this.dbConnection = this.client.db(this.db)
-        return true
+        if(!this.dbConnection){
+            await this.client.connect();
+            this.dbConnection = this.client.db(this.db)
+            console.log("DATABASE CONNECTION ESTABLISHED");
+            return true
+        }
     }
     async disconnect() {
         if (this.dbConnection) {
             await this.client.close();
             this.dbConnection = false;
+            console.log("DATABASE CONNECTION CLOSED");
         }
         return true;
     }

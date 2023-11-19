@@ -32,7 +32,7 @@ async function verifyKeyword(keyword) {
     if (doc) {
         const result = await doc.where({ keyword })
         if (result.length > 0) {
-            return { status: 0, data: response[0] }
+            return { status: 0, data: result[0] }
         } else {
             return { status: 1 }
         }

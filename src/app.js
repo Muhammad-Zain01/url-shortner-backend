@@ -5,11 +5,10 @@ const AuthRouter = require('./router/auth/auth.routes')
 const GlobalRoutes = require('./router/global/global.routes')
 
 const app = express();
-
 app.use(cors({ origin: '*' }))
 app.use(express.json())
-app.use(AdminRoutes)
+app.use("/auth", AuthRouter)
 app.use(GlobalRoutes)
-app.use(AuthRouter)
+app.use("/admin",AdminRoutes)
 
 module.exports = app;
