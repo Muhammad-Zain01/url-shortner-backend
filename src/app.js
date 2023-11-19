@@ -5,7 +5,6 @@ const cors = require('cors');
 // const UserController = require('./controller/user.controller')
 const UrlRouter = require('./router/url.router')
 const UserRouter = require('./router/user.router')
-const AuthenticateUser = require('./middleware/authenticate')
 const ProxyMiddleware = require('./middleware/proxy');
 
 app.use(cors({ origin: '*' }))
