@@ -1,15 +1,20 @@
 const axios = require('axios');
 const { captureUser } = require('../../model/global.model')
+const { verifyKeyword } = require('../../model/admin.modal')
 async function globalCaptureUser(req, res) {
-    const { deviceInfo, keyword } = req.body;
+    const keyword = req.params.keyword;
+    const keywordresponse = await verifyKeyword(keyword)
+    if (keywordresponse.status) {
+        return res.redirect(`${process.env.CLIENT_URL}/not-found`)
+    }
     const ipResponse = await axios.get('https://api.ipify.org?format=json');
     const userIp = ipResponse.data.ip;
     const locationResponse = await axios.get(`http://ip-api.com/json/${userIp}`);
     const userLocation = locationResponse.data;
     const currentTime = new Date();
-    const data = { userIp, userData: { ...deviceInfo, ...userLocation }, time: currentTime, keyword }
-    const result = captureUser(data)
-    res.json(result);
+    const data = { userIp, userData: { ...userLocation }, time: currentTime, keyword }
+    await captureUser(data)
+    res.redirect("https://" + keywordresponse?.data?.url);
 }
 
 async function globalProxyMiddleware(req, res) {
@@ -32,6 +37,6 @@ async function globalProxyMiddleware(req, res) {
 
 module.exports = {
     globalCaptureUser,
-    globalProxyMiddleware
+    globalProxyMiddleware,
 }
 

@@ -16,7 +16,17 @@ async function getAllUrls(user) {
     }
     return { status: 0 }
 }
+async function deleteUrl(keyword) {
+    const doc = await dbInstance.remove('urls');
+    if (doc) {
+        const result = await doc.One({ keyword })
+        if(result.acknowledged){
+            return { status: 1 }
+        }
+    }
+    return { status: 0 }
 
+}
 async function insertUrl(data) {
     const doc = await dbInstance.addDocument('urls')
     if (doc) {
@@ -43,5 +53,6 @@ async function verifyKeyword(keyword) {
 module.exports = {
     getAllUrls,
     insertUrl,
-    verifyKeyword
+    verifyKeyword,
+    deleteUrl
 }
