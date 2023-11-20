@@ -1,9 +1,15 @@
-const { getAllUrls, insertUrl, verifyKeyword, deleteUrl } = require('../../model/admin.modal')
+const { getAllUrls, insertUrl, verifyKeyword, deleteUrl, getUserDashboardData } = require('../../model/admin.modal')
 const { makeKeyword } = require('../../utils/helper');
 async function adminGetData(req, res) {
     const body = req.body;
     const user = body?.user;
     const result = await getAllUrls(user);
+    res.json(result)
+}
+async function adminDashboardData(req, res){
+    const body = req.body;
+    const user = body?.user;
+    const result = await getUserDashboardData(user);
     res.json(result)
 }
 async function removeURL(req, res) {
@@ -37,5 +43,6 @@ module.exports = {
     adminGetData,
     adminAddURL,
     adminVerifyKeyword,
-    removeURL
+    removeURL,
+    adminDashboardData
 }

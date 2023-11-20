@@ -12,7 +12,7 @@ async function globalCaptureUser(req, res) {
     const locationResponse = await axios.get(`http://ip-api.com/json/${userIp}`);
     const userLocation = locationResponse.data;
     const currentTime = new Date();
-    const data = { userIp, userData: { ...userLocation }, time: currentTime, keyword }
+    const data = { ip: userIp, data: { location: userLocation, headers: req.headers  }, time: currentTime, keyword }
     await captureUser(data)
     res.redirect("https://" + keywordresponse?.data?.url);
 }

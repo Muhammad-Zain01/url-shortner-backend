@@ -8,5 +8,6 @@ AdminRoutes.post('/events/add-url', AdminController.adminAddURL)
 AdminRoutes.post('/events/remove-url/:keyword', AdminController.removeURL)
 AdminRoutes.post('/events/get-urls', AdminController.adminGetData)
 AdminRoutes.post('/events/keyword/:keyword', AdminController.adminVerifyKeyword)
+AdminRoutes.post('/events/dasboard-data', AdminController.adminDashboardData)
 
 module.exports = AdminRoutes;

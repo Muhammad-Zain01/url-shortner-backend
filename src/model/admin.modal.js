@@ -13,8 +13,7 @@ async function getAllUrls(user) {
                 }
             }, {
                 '$match': {
-                    'keyword': 'techdore',
-                    'user': 'zainmemon'
+                    'user': user.username
                 }
             }, {
                 '$addFields': {
@@ -38,16 +37,55 @@ async function getAllUrls(user) {
     }
     return { status: 0 }
 }
+async function getUserDashboardData(user) {
+    const doc = await dbInstance.getData('users');
+    if (doc) {
+        const agg = [
+            {
+                '$lookup': {
+                    'from': 'urls',
+                    'localField': 'username',
+                    'foreignField': 'user',
+                    'as': 'urls_data'
+                }
+            }, {
+                '$lookup': {
+                    'from': 'webdata',
+                    'localField': 'urls_data.keyword',
+                    'foreignField': 'keyword',
+                    'as': 'webdata'
+                }
+            }, {
+                '$match': {
+                    'username': user.username
+                }
+            }
+        ]
+        const result = await doc.aggregate(agg)
+        return { status: 1, data: result[0] }
+    }
+    return { status: 0 }
+}
 async function deleteUrl(keyword) {
     const doc = await dbInstance.remove('urls');
     if (doc) {
         const result = await doc.One({ keyword })
+        deleteViews(keyword);
         if (result.acknowledged) {
             return { status: 1 }
         }
     }
     return { status: 0 }
-
+}
+async function deleteViews(keyword) {
+    const doc = await dbInstance.remove('webdata');
+    if (doc) {
+        const result = await doc.Many({ keyword })
+        if (result.acknowledged) {
+            return { status: 1 }
+        }
+    }
+    return { status: 0 }
 }
 async function insertUrl(data) {
     const doc = await dbInstance.addDocument('urls')
@@ -76,5 +114,6 @@ module.exports = {
     getAllUrls,
     insertUrl,
     verifyKeyword,
-    deleteUrl
+    deleteUrl,
+    getUserDashboardData
 }
