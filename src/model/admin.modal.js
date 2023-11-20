@@ -3,13 +3,35 @@ const dbInstance = require('../utils/database')
 async function getAllUrls(user) {
     const doc = await dbInstance.getData('urls');
     if (doc) {
-        const result = await doc.where({ user: user.username })
+        const agg = [
+            {
+                '$lookup': {
+                    'from': 'webdata',
+                    'localField': 'keyword',
+                    'foreignField': 'keyword',
+                    'as': 'data'
+                }
+            }, {
+                '$match': {
+                    'keyword': 'techdore',
+                    'user': 'zainmemon'
+                }
+            }, {
+                '$addFields': {
+                    'views': {
+                        '$size': '$data'
+                    }
+                }
+            }
+        ];
+        const result = await doc.aggregate(agg)
         const data = result.map(item => {
             return {
                 url: item.url,
                 title: item.title,
                 keyword: item.keyword,
-                icon: item.icon
+                icon: item.icon,
+                views: item.views
             }
         })
         return { status: 1, data }
@@ -20,7 +42,7 @@ async function deleteUrl(keyword) {
     const doc = await dbInstance.remove('urls');
     if (doc) {
         const result = await doc.One({ keyword })
-        if(result.acknowledged){
+        if (result.acknowledged) {
             return { status: 1 }
         }
     }

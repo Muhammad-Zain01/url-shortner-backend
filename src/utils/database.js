@@ -15,7 +15,7 @@ class Database {
         });
     }
     async connect() {
-        if(!this.dbConnection){
+        if (!this.dbConnection) {
             await this.client.connect();
             this.dbConnection = this.client.db(this.db)
             console.log("DATABASE CONNECTION ESTABLISHED");
@@ -41,7 +41,11 @@ class Database {
                 findObject = query;
                 return result();
             }
-            return { result, where }
+            const aggregate = async (query) => {
+                const cursor = DocSnap.aggregate(query);
+                return await cursor.toArray();
+            }
+            return { result, where, aggregate }
         }
         return false;
     }
@@ -63,7 +67,7 @@ class Database {
         }
         return false
     }
-    async addDocument(collection){
+    async addDocument(collection) {
         if (this.dbConnection) {
             const DocSnap = await this.dbConnection.collection(collection);
             const One = (data) => { return DocSnap.insertOne(data) }
@@ -72,7 +76,7 @@ class Database {
         }
         return false
     }
-    async addCollection(collection){
+    async addCollection(collection) {
         if (this.dbConnection) {
             return await this.dbConnection.createCollection(collection);
         }
