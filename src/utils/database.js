@@ -61,7 +61,7 @@ class Database {
     async update(collection) {
         if (this.dbConnection) {
             const DocSnap = await this.dbConnection.collection(collection);
-            const One = (query, data) => { return DocSnap.updateOne(query, data) }
+            const One = (query, data) => { return DocSnap.updateOne(query, { $set: data }) }
             const Many = (query, data) => { return DocSnap.updateMany(query, data) }
             return { One, Many }
         }
