@@ -1,12 +1,19 @@
-const { getAllUrls, insertUrl, verifyKeyword, deleteUrl, getUserDashboardData } = require('../../model/admin.modal')
 const { makeKeyword } = require('../../utils/helper');
+const {
+    getAllUrls,
+    insertUrl,
+    getDisplayName,
+    verifyKeyword,
+    deleteUrl,
+    getUserDashboardData
+} = require('../../model/admin.modal')
 async function adminGetData(req, res) {
     const body = req.body;
     const user = body?.user;
     const result = await getAllUrls(user);
     res.json(result)
 }
-async function adminDashboardData(req, res){
+async function adminDashboardData(req, res) {
     const body = req.body;
     const user = body?.user;
     const result = await getUserDashboardData(user);
@@ -19,7 +26,6 @@ async function removeURL(req, res) {
 }
 async function adminAddURL(req, res) {
     const body = req.body
-    // const userId = Buffer.from(body?.user?.token, 'base64').toString('hex');
     const username = body?.user?.username
     let keyword = body.keyword;
     if (keyword == "") { keyword = makeKeyword() }
@@ -39,10 +45,23 @@ async function adminVerifyKeyword(req, res) {
     const result = await verifyKeyword(keyword);
     res.json(result);
 }
+async function DisplayName(req, res) {
+    const body = req.body;
+    const user = body?.user;
+    const result = await getDisplayName(user);
+    res.json(result);
+}
+async function setDisplayName(req, res) {
+    const body = req.body;
+    const name = body?.name;
+
+}
 module.exports = {
     adminGetData,
     adminAddURL,
     adminVerifyKeyword,
     removeURL,
-    adminDashboardData
+    adminDashboardData,
+    DisplayName,
+    setDisplayName
 }
