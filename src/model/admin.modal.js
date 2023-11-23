@@ -115,7 +115,7 @@ async function getDisplayName(user) {
     if (doc) {
         const result = await doc.where({ username: user.username })
         if (result.length > 0) {
-            return { status: 1, data: result[0] }
+            return { status: 1, data: result[0].displayName }
         }
     }
     return { status: 0 }
@@ -130,6 +130,16 @@ async function setdisplayName(user, name) {
     }
     return { status: 0 }
 }
+async function getUser(user) {
+    const doc = await dbInstance.getData('users')
+    if (doc) {
+        const result = await doc.where({ username: user.username })
+        if (result.length > 0) {
+            return { status: 1, data: result[0] }
+        }
+    }
+    return { status: 0 }
+}
 module.exports = {
     getAllUrls,
     insertUrl,
@@ -137,5 +147,6 @@ module.exports = {
     deleteUrl,
     getUserDashboardData,
     getDisplayName,
-    setdisplayName
+    setdisplayName,
+    getUser
 }
