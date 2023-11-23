@@ -110,10 +110,21 @@ async function verifyKeyword(keyword) {
     }
     return { status: 0 }
 }
+async function getDisplayName(user) {
+    const doc = await dbInstance.getData('users')
+    if (doc) {
+        const result = await doc.where({ username: user.username })
+        if (result.length > 0) {
+            return { status: 1, data: result[0] }
+        }
+    }
+    return { status: 0 }
+}
 module.exports = {
     getAllUrls,
     insertUrl,
     verifyKeyword,
     deleteUrl,
-    getUserDashboardData
+    getUserDashboardData,
+    getDisplayName
 }
