@@ -120,11 +120,22 @@ async function getDisplayName(user) {
     }
     return { status: 0 }
 }
+async function setdisplayName(user, name) {
+    const doc = await dbInstance.update('users')
+    if (doc) {
+        const result = await doc.One({ username: user.username }, { displayName: name })
+        if (result.modifiedCount) {
+            return { status: 1, data: result[0] }
+        }
+    }
+    return { status: 0 }
+}
 module.exports = {
     getAllUrls,
     insertUrl,
     verifyKeyword,
     deleteUrl,
     getUserDashboardData,
-    getDisplayName
+    getDisplayName,
+    setdisplayName
 }
