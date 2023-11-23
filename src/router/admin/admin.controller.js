@@ -6,7 +6,8 @@ const {
     verifyKeyword,
     deleteUrl,
     getUserDashboardData,
-    setdisplayName
+    setdisplayName,
+    getUser
 } = require('../../model/admin.modal')
 async function adminGetData(req, res) {
     const body = req.body;
@@ -58,7 +59,12 @@ async function setDisplayName(req, res) {
     const name = body?.name;
     const result = await setdisplayName(user, name);
     res.json(result)
-
+}
+async function getUserData(req, res) {
+    const body = req.body;
+    const user = body?.user;
+    const result = await getUser(user);
+    res.json(result);
 }
 module.exports = {
     adminGetData,
@@ -67,5 +73,6 @@ module.exports = {
     removeURL,
     adminDashboardData,
     DisplayName,
-    setDisplayName
+    setDisplayName,
+    getUserData
 }
