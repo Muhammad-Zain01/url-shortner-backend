@@ -11,7 +11,7 @@ async function checkUsername(username) {
 async function registerUser(username, email, password) {
     const doc = await dbInstance.addDocument('users')
     if (doc) {
-        doc.One({ username, email, password })
+        doc.One({ username, displayName: username, email, password })
         return { status: 1, message: 'User Created Successfully' }
     }
     return { status: 0, message: 'Something Went Wrong' }
