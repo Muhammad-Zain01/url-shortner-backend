@@ -19,7 +19,7 @@ async function registerUser(username, email, password) {
 async function authenticateUser(username, password) {
     const doc = await dbInstance.getData('users')
     if (doc) {
-        const response = await doc.where({ username, password })
+        const response = await doc.where({ username })
         if (response.length > 0) {
             const base64String = Buffer.from(response[0]._id.toHexString(), 'hex').toString('base64');
             return {
