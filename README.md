@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-
+<img src="https://raw.githubusercontent.com/Muhammad-Zain01/url-shortner/main/public/logo.png" style="width: 320px;" />
 <h3 align="center">URL Shortner (Backend)</h3>
 <div>
     <a href="https://github.com/muhammad-zain01/url-shortner-backend/graphs/contributors"><img src="https://img.shields.io/github/contributors/muhammad-zain01/url-shortner-backend.svg?style=for-the-badge" /></a>
