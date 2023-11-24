@@ -140,6 +140,21 @@ async function getUser(user) {
     }
     return { status: 0 }
 }
+async function updatePassword(user, oldPassword, newPassword) {
+    const username = user?.username;
+    const doc = await dbInstance.getData('users')
+    const doc_update = await dbInstance.update('users');
+    if (doc) {
+        const result = await doc.where({ username, password: oldPassword })
+        if (result.length > 0) {
+            const result = await doc_update.One({ username }, { password: newPassword })
+            if (result.modifiedCount) {
+                return { status: 1 }
+            }
+        }
+        return { status: 0 }
+    }
+}
 module.exports = {
     getAllUrls,
     insertUrl,
@@ -148,5 +163,6 @@ module.exports = {
     getUserDashboardData,
     getDisplayName,
     setdisplayName,
-    getUser
+    getUser,
+    updatePassword
 }
