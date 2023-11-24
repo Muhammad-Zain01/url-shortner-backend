@@ -7,7 +7,8 @@ const {
     deleteUrl,
     getUserDashboardData,
     setdisplayName,
-    getUser
+    getUser,
+    updatePassword
 } = require('../../model/admin.modal')
 async function adminGetData(req, res) {
     const body = req.body;
@@ -66,6 +67,13 @@ async function getUserData(req, res) {
     const result = await getUser(user);
     res.json(result);
 }
+async function httpUpdatePassword(req, res) {
+    const body = req.body;
+    const currentPassword = body?.currentPassword;
+    const newPassword = body?.newPassword;
+    const result = await updatePassword(currentPassword, newPassword);
+    res.json(result);
+}
 module.exports = {
     adminGetData,
     adminAddURL,
@@ -74,5 +82,6 @@ module.exports = {
     adminDashboardData,
     DisplayName,
     setDisplayName,
-    getUserData
+    getUserData,
+    httpUpdatePassword
 }
