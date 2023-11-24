@@ -11,6 +11,7 @@ AdminRoutes.post('/events/get-user', AdminController.getUserData)
 AdminRoutes.post('/events/keyword/:keyword', AdminController.adminVerifyKeyword)
 AdminRoutes.post('/events/dasboard-data', AdminController.adminDashboardData)
 AdminRoutes.post('/events/get-display-name', AdminController.DisplayName)
+AdminRoutes.post('/events/update-password', AdminController.httpUpdatePassword)
 AdminRoutes.post('/events/set-display-name', AdminController.setDisplayName)
 
 module.exports = AdminRoutes;
