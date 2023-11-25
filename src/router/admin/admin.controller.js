@@ -69,9 +69,10 @@ async function getUserData(req, res) {
 }
 async function httpUpdatePassword(req, res) {
     const body = req.body;
+    const user = body?.user;
     const currentPassword = body?.currentPassword;
     const newPassword = body?.newPassword;
-    const result = await updatePassword(currentPassword, newPassword);
+    const result = await updatePassword(user, currentPassword, newPassword);
     res.json(result);
 }
 module.exports = {
