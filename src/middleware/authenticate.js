@@ -21,7 +21,7 @@ const AuthenticateUser = async (req, res, next) => {
                 return res.json({ status: 0, message: 'NON_USER', param: PARAM })
             }
         } catch (e) {
-            return res.json({ error: e })
+            return res.json({ error: e, param: PARAM })
         }
     }
 }
