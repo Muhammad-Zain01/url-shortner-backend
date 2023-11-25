@@ -9,6 +9,7 @@ const AuthenticateUser = async (req, res, next) => {
         const token = user?.token;
         const username = user?.username;
         const doc = await DBInstance.getData('users')
+        PARAM.push(doc)
         if (doc) {
             const data = await doc.where({ username })
             PARAM.push(data)
