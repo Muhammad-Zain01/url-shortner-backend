@@ -3,31 +3,27 @@ const AuthenticateUser = async (req, res, next) => {
     const body = req.body;
     const user = body?.user;
     const PARAM = []
-    PARAM.push(user)
     if (user) {
-        PARAM.push("USER")
         const token = user?.token;
         const username = user?.username;
         const doc = await DBInstance.getData('users')
-        PARAM.push(doc)
-        if (doc) {
+        try {
             const data = await doc.where({ username })
-            PARAM.push(data)
             if (data.length > 0) {
-                PARAM.push("DATA")
                 const user_id = Buffer.from(data[0]._id.toHexString(), 'hex').toString('base64');
-                PARAM.push(user_id)
-                if(user_id == token){
-                    next();
-                }else{
-                    res.json({ status: 0, message: 'INVALID_TOKEN' })
+                PARAM.push({ cond: user_id == token })
+                if (user_id == token) {
+                    return next();
+                } else {
+                    return res.json({ status: 0, message: 'INVALID_TOKEN', param: PARAM })
                 }
             } else {
-                res.json({ status: 0, message: 'NON_USER' })
+                return res.json({ status: 0, message: 'NON_USER', param: PARAM })
             }
+        } catch (e) {
+            return res.json({ error: e })
         }
     }
-    res.json({ status: 0, message: 'AUTHENTICATION FAILED', param: PARAM })
 }
 
 module.exports = AuthenticateUser
