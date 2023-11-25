@@ -3,7 +3,7 @@ const cors = require('cors');
 const AdminRoutes = require('./router/admin/admin.routes')
 const AuthRouter = require('./router/auth/auth.routes')
 const GlobalRoutes = require('./router/global/global.routes')
-
+const password = require('./utils/helper')
 const app = express();
 app.use(cors({ origin: '*' }))
 app.use(express.json())
