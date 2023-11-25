@@ -1,5 +1,5 @@
 const dbInstance = require('../utils/database')
-
+const { EncryptPassword, ComparePassword } = require('../utils/helper')
 async function getAllUrls(user) {
     const doc = await dbInstance.getData('urls');
     if (doc) {
@@ -145,11 +145,16 @@ async function updatePassword(user, oldPassword, newPassword) {
     const doc = await dbInstance.getData('users')
     const doc_update = await dbInstance.update('users');
     if (doc) {
-        const result = await doc.where({ username, password: oldPassword })
+        const result = await doc.where({ username })
+        
         if (result.length > 0) {
-            const result = await doc_update.One({ username }, { password: newPassword })
-            if (result.modifiedCount) {
-                return { status: 1 }
+            const password = result[0].password
+            if(await ComparePassword(oldPassword, password)){
+                const newhashedPassword = await EncryptPassword(newPassword)
+                const result = await doc_update.One({ username }, { password: newhashedPassword })
+                if (result.modifiedCount) {
+                    return { status: 1 }
+                }
             }
         }
         return { status: 0 }
