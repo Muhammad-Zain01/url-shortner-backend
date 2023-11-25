@@ -4,7 +4,7 @@ const AdminRoutes = require('./router/admin/admin.routes')
 const AuthRouter = require('./router/auth/auth.routes')
 const GlobalRoutes = require('./router/global/global.routes')
 const app = express();
-app.use(cors({ origin: 'https://url-shortr.vercel.app' }))
+app.use(cors({ origin: '*' }))
 app.use(express.json())
 app.use("/auth", AuthRouter)
 app.use(GlobalRoutes)
