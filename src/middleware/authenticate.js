@@ -2,14 +2,18 @@ const DBInstance = require('../utils/database');
 const AuthenticateUser = async (req, res, next) => {
     const body = req.body;
     const user = body?.user;
+    const PARAM = []
+    PARAM.push(user)
     if (user) {
         const token = user?.token;
         const username = user?.username;
         const doc = await DBInstance.getData('users')
         if (doc) {
             const data = await doc.where({ username })
+            PARAM.push(data)
             if (data.length > 0) {
                 const user_id = Buffer.from(data[0]._id.toHexString(), 'hex').toString('base64');
+                PARAM.push(user_id)
                 if(user_id == token){
                     next();
                 }else{
@@ -20,7 +24,7 @@ const AuthenticateUser = async (req, res, next) => {
             }
         }
     }
-    res.json({ status: 0, message: 'AUTHENTICATION FAILED' })
+    res.json({ status: 0, message: 'AUTHENTICATION FAILED', param: PARAM })
 }
 
 module.exports = AuthenticateUser
