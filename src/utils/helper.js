@@ -1,3 +1,7 @@
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+
 function makeKeyword(length = 8) {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -10,4 +14,21 @@ function makeKeyword(length = 8) {
     return result;
 }
 
-module.exports = { makeKeyword }
+async function EncryptPassword(password) {
+    try {
+        const hash = await bcrypt.hash(password, saltRounds);
+        return hash;
+    } catch (error) {
+        throw new Error('Error hashing password');
+    }
+}
+async function ComparePassword(password, hashedPassword) {
+    try {
+        const match = await bcrypt.compare(password, hashedPassword);
+        return match;
+    } catch (error) {
+        throw new Error('Error comparing passwords');
+    }
+
+}
+module.exports = { makeKeyword, EncryptPassword, ComparePassword }
