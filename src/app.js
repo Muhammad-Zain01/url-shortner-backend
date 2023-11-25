@@ -9,6 +9,8 @@ app.use(cors({ origin: '*' }))
 app.use(express.json())
 app.use("/auth", AuthRouter)
 app.use(GlobalRoutes)
-app.use("/admin",AdminRoutes)
-
+app.use("/admin", AdminRoutes)
+app.use('/', (req, res) => {
+    res.send("Url Shortner Working Fine");
+})
 module.exports = app;
