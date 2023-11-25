@@ -39,7 +39,7 @@ async function getAllUrls(user) {
 }
 async function getUserDashboardData(user) {
     const doc = await dbInstance.getData('users');
-    try{
+    if (doc) {
         const agg = [
             {
                 '$lookup': {
@@ -63,10 +63,8 @@ async function getUserDashboardData(user) {
         ]
         const result = await doc.aggregate(agg)
         return { status: 1, data: result[0] }
-    }catch(err){
-        return { status: 0, error: err }
     }
-    
+    return { status: 0 }
 }
 async function deleteUrl(keyword) {
     const doc = await dbInstance.remove('urls');
@@ -148,10 +146,10 @@ async function updatePassword(user, oldPassword, newPassword) {
     const doc_update = await dbInstance.update('users');
     if (doc) {
         const result = await doc.where({ username })
-
+        
         if (result.length > 0) {
             const password = result[0].password
-            if (await ComparePassword(oldPassword, password)) {
+            if(await ComparePassword(oldPassword, password)){
                 const newhashedPassword = await EncryptPassword(newPassword)
                 const result = await doc_update.One({ username }, { password: newhashedPassword })
                 if (result.modifiedCount) {
