@@ -93,7 +93,7 @@ async function verifyKeyword(keyword) {
 async function getDisplayName(user) {
     try {
         const username = user.username;
-        const result = users.findOne({ username });
+        const result = await users.findOne({ username });
         if (result) return { status: 1, data: result.displayName }
         else return { status: 0, message: "INVALID_USER" }
     } catch (error) {
