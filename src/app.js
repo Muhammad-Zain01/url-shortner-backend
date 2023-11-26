@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-// const AdminRoutes = require('./router/admin/admin.routes')
+const AdminRoutes = require('./router/admin.routes')
 const AuthRouter = require('./router/auth.routes')
 const GlobalRoutes = require('./router/global.routes')
 
@@ -12,6 +12,6 @@ app.use(express.json())
 
 app.use("/auth", AuthRouter)
 app.use(GlobalRoutes)
-// app.use("/admin", AdminRoutes)
+app.use("/admin", AdminRoutes)
 
 module.exports = app;
