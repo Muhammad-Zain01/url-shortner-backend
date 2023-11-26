@@ -1,6 +1,7 @@
-const dbInstance = require('../utils/database')
-const { EncryptPassword, ComparePassword } = require('../utils/helper')
-async function getAllUrls(user) {
+const { urls, users, views } = require('../db/schema')
+const { EncryptPassword, ComparePassword, errorResponse } = require('../utils/helper')
+
+async function getUrls(user) {
     const doc = await dbInstance.getData('urls');
     if (doc) {
         const agg = [
@@ -67,107 +68,86 @@ async function getUserDashboardData(user) {
     return { status: 0 }
 }
 async function deleteUrl(keyword) {
-    const doc = await dbInstance.remove('urls');
-    if (doc) {
-        const result = await doc.One({ keyword })
-        deleteViews(keyword);
-        if (result.acknowledged) {
-            return { status: 1 }
-        }
+    try {
+        await urls.deleteOne({ keyword })
+        await views.deleteMany({ keyword })
+        return { status: 1 }
+    } catch (error) {
+        return errorResponse(error)
     }
-    return { status: 0 }
-}
-async function deleteViews(keyword) {
-    const doc = await dbInstance.remove('webdata');
-    if (doc) {
-        const result = await doc.Many({ keyword })
-        if (result.acknowledged) {
-            return { status: 1 }
-        }
-    }
-    return { status: 0 }
 }
 async function insertUrl(data) {
-    const doc = await dbInstance.addDocument('urls')
-    if (doc) {
-        const result = await doc.One(data);
-        if (result.acknowledged) {
-            return { status: 1 }
-        }
+    try {
+        await urls.create(data);
+        return { status: 1 }
+    } catch (error) {
+        return errorResponse(error)
     }
-    return { status: 0 }
 }
 async function verifyKeyword(keyword) {
-    const doc = await dbInstance.getData('urls')
-    if (doc) {
-        const result = await doc.where({ keyword })
-        if (result.length > 0) {
-            return { status: 0, data: result[0] }
-        } else {
-            return { status: 1 }
-        }
-
+    try {
+        const result = await urls.findOne({ keyword })
+        if (result) return { status: 1 }
+        else return { status: 0 }
+    } catch (error) {
+        return errorResponse(error)
     }
-    return { status: 0 }
 }
 async function getDisplayName(user) {
-    const doc = await dbInstance.getData('users')
-    if (doc) {
-        const result = await doc.where({ username: user.username })
-        if (result.length > 0) {
-            return { status: 1, data: result[0].displayName }
-        }
+    try {
+        const username = user.username;
+        const result = users.findOne({ username });
+        if (result) return { status: 1, data: result.displayName }
+        else return { status: 0, message: "INVALID_USER" }
+    } catch (error) {
+        return errorResponse(error)
     }
-    return { status: 0 }
 }
-async function setdisplayName(user, name) {
-    const doc = await dbInstance.update('users')
-    if (doc) {
-        const result = await doc.One({ username: user.username }, { displayName: name })
-        if (result.modifiedCount) {
-            return { status: 1, data: result[0] }
-        }
+async function updateDisplayName(user, name) {
+    try {
+        const username = user.username
+        await users.updateOne({ username }, { displayName: name })
+        return { status: 1 }
+    } catch (error) {
+        return errorResponse(error)
     }
-    return { status: 0 }
 }
 async function getUser(user) {
-    const doc = await dbInstance.getData('users')
-    if (doc) {
-        const result = await doc.where({ username: user.username })
-        if (result.length > 0) {
-            return { status: 1, data: result[0] }
-        }
+    try {
+        const username = user?.username;
+        const result = await users.findOne({ username }, { '_id': 0, '__v': 0 })
+        if (result) return { status: 1, data: result }
+        else return { status: 0, message: "INVALID_USER" }
+    } catch (error) {
+        return errorResponse(error)
     }
-    return { status: 0 }
 }
 async function updatePassword(user, oldPassword, newPassword) {
-    const username = user?.username;
-    const doc = await dbInstance.getData('users')
-    const doc_update = await dbInstance.update('users');
-    if (doc) {
-        const result = await doc.where({ username })
-        
-        if (result.length > 0) {
-            const password = result[0].password
-            if(await ComparePassword(oldPassword, password)){
-                const newhashedPassword = await EncryptPassword(newPassword)
-                const result = await doc_update.One({ username }, { password: newhashedPassword })
-                if (result.modifiedCount) {
-                    return { status: 1 }
-                }
-            }
+    try {
+        const username = user?.username
+        const result = await users.findOne({ username })
+        if (result) {
+            const password = result.password;
+            if (await ComparePassword(oldPassword, password)) {
+                const newHashedPassword = await EncryptPassword(newPassword)
+                await users.update({ username }, { password: newHashedPassword })
+                return { status: 1 }
+            } else { return { status: 0, message: 'INVALID_PASSWORD' } }
         }
-        return { status: 0 }
+        else { return { status: 0, message: 'INVALID_USER' } }
+    }
+    catch (error) {
+        return errorResponse(error)
     }
 }
 module.exports = {
-    getAllUrls,
+    getUrls,
     insertUrl,
     verifyKeyword,
     deleteUrl,
     getUserDashboardData,
     getDisplayName,
-    setdisplayName,
+    updateDisplayName,
     getUser,
     updatePassword
 }
