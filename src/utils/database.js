@@ -15,12 +15,12 @@ class Database {
         });
     }
     async connect() {
-        if (!this.dbConnection) {
-            await this.client.connect();
-            this.dbConnection = this.client.db(this.db)
-            console.log("DATABASE CONNECTION ESTABLISHED");
-            return true
-        }
+        // if (!this.dbConnection) {
+        //     await this.client.connect();
+        //     this.dbConnection = this.client.db(this.db)
+        //     console.log("DATABASE CONNECTION ESTABLISHED");
+        // }
+        return true
     }
     async disconnect() {
         if (this.dbConnection) {
