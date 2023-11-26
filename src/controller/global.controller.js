@@ -1,11 +1,11 @@
 const axios = require('axios');
 const { captureUser } = require('../model/global.model')
 const { verifyKeyword } = require('../model/admin.modal')
-
+const {joinUrl} = require('../utils/helper')
 async function httpCaptureUser(req, res) {
     const keyword = req.params.keyword;
-    const keywordresponse = await verifyKeyword(keyword)
-    if (!keywordresponse.status) {
+    const keywordResponse = await verifyKeyword(keyword)
+    if (!keywordResponse.status) {
         return res.redirect(`${process.env.CLIENT_URL}/not-found`)
     }
     const userIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -14,7 +14,7 @@ async function httpCaptureUser(req, res) {
     const currentTime = new Date();
     const data = { ip: userIp, data: { location: userLocation, headers: req.headers  }, time: currentTime, keyword }
     await captureUser(data)
-    res.redirect("https://" + keywordresponse?.data?.url);
+    res.redirect(joinUrl(keywordResponse?.result?.url));
 }
 
 async function httpProxyMiddleware(req, res) {
