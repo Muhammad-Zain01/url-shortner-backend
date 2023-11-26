@@ -31,4 +31,11 @@ async function ComparePassword(password, hashedPassword) {
 
 }
 const errorResponse = (error) => ({ status: 0, message: "SERVER_ERROR", error });
-module.exports = { makeKeyword, EncryptPassword, ComparePassword, errorResponse }
+function joinUrl(baseUrl) {
+    if (!baseUrl.match(/^https?:\/\//)) {
+        baseUrl = 'http://' + baseUrl;
+    }
+    return baseUrl;
+}
+
+module.exports = { makeKeyword, joinUrl, EncryptPassword, ComparePassword, errorResponse }
