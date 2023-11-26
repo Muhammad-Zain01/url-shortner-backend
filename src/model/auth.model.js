@@ -1,44 +1,58 @@
-const dbInstance = require('../utils/database')
-const { EncryptPassword, ComparePassword } = require('../utils/helper')
-async function checkUsername(username) {
-    const doc = await dbInstance.getData('users')
-    if (doc) {
-        const FilteredData = await doc.where({ username })
-        return { status: FilteredData.length > 0 ? 1 : 0 }
+const { EncryptPassword, ComparePassword, errorResponse } = require('../utils/helper')
+const { users } = require('../db/schema')
+
+async function isUserNameAvailable(username) {
+    try {
+        const result = await users.findOne({ username })
+        if (result) return { status: 0 }
+        else return { status: 1 }
+    } catch (error) {
+        return errorResponse(error)
     }
-    return { status: 0 }
 }
-async function registerUser(username, email, password) {
-    const doc = await dbInstance.addDocument('users')
-    if (doc) {
-        const hashedPassword = await EncryptPassword(password);
-        doc.One({ username, displayName: username, email, password: hashedPassword })
-        return { status: 1, message: 'User Created Successfully' }
+async function registerUser(username, email, pass) {
+    try {
+        const displayName = username
+        const password = await EncryptPassword(pass)
+        await users.create({ username, email, password, displayName })
+        return { status: 1 }
+    } catch (error) {
+        return errorResponse(error)
     }
-    return { status: 0, message: 'Something Went Wrong' }
 }
 async function authenticateUser(username, password) {
-    const doc = await dbInstance.getData('users')
-    if (doc) {
-        const response = await doc.where({ username })
-        if (response.length > 0) {
-            const passwordVerify = await ComparePassword(password, response[0].password)
-            if(passwordVerify){
-                const base64String = Buffer.from(response[0]._id.toHexString(), 'hex').toString('base64');
+    try {
+        const result = await users.findOne({ username })
+        if (result) {
+            const isCorrectPassword = await ComparePassword(password, result.password)
+            if (isCorrectPassword) {
+                const token = Buffer.from(result._id.toHexString(), 'hex').toString('base64');
                 return {
                     status: 1,
                     data: {
-                        username: response[0].username, email: response[0].email, token: base64String
+                        username: result.username,
+                        email: result.email,
+                        token
                     }
                 }
+            } else {
+                return {
+                    status: 0,
+                    message: 'INVALID_PASSWORD'
+                }
             }
+        } else {
+            return { status: 0, message: "INVALID_USER" };
+
         }
     }
-    return { status: 0 }
+    catch (error) {
+        return errorResponse(error)
+    }
 }
 
 module.exports = {
-    checkUsername,
+    isUserNameAvailable,
     registerUser,
     authenticateUser
 }
