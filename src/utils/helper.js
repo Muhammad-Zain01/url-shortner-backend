@@ -24,11 +24,11 @@ async function EncryptPassword(password) {
 }
 async function ComparePassword(password, hashedPassword) {
     try {
-        const match = await bcrypt.compare(password, hashedPassword);
-        return match;
+        return await bcrypt.compare(password, hashedPassword);
     } catch (error) {
         throw new Error('Error comparing passwords');
     }
 
 }
-module.exports = { makeKeyword, EncryptPassword, ComparePassword }
+const errorResponse = (error) => ({ status: 0, message: "SERVER_ERROR", error });
+module.exports = { makeKeyword, EncryptPassword, ComparePassword, errorResponse }
