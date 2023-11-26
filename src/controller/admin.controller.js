@@ -10,7 +10,7 @@ const {
     updateDisplayName,
     getUser,
     updatePassword
-} = require('../../model/admin.modal')
+} = require('../model/admin.modal')
 
 async function httpGetData(req, res) {
     const body = req.body;
