@@ -2,30 +2,29 @@ const { urls, users, views } = require('../db/schema')
 const { EncryptPassword, ComparePassword, errorResponse } = require('../utils/helper')
 
 async function getUrls(user) {
-    const doc = await dbInstance.getData('urls');
-    if (doc) {
-        const agg = [
-            {
-                '$lookup': {
-                    'from': 'webdata',
-                    'localField': 'keyword',
-                    'foreignField': 'keyword',
-                    'as': 'data'
-                }
-            }, {
-                '$match': {
-                    'user': user.username
-                }
-            }, {
-                '$addFields': {
-                    'views': {
-                        '$size': '$data'
-                    }
+    const agg = [
+        {
+            '$lookup': {
+                'from': 'views',
+                'localField': 'keyword',
+                'foreignField': 'keyword',
+                'as': 'data'
+            }
+        }, {
+            '$match': {
+                'user': user.username
+            }
+        }, {
+            '$addFields': {
+                'views': {
+                    '$size': '$data'
                 }
             }
-        ];
-        const result = await doc.aggregate(agg)
-        const data = result.map(item => {
+        }
+    ];
+    const result = await urls.aggregate(agg);
+    if (result) {
+        result.map(item => {
             return {
                 url: item.url,
                 title: item.title,
@@ -34,38 +33,36 @@ async function getUrls(user) {
                 views: item.views
             }
         })
-        return { status: 1, data }
+        return { status: 1, data: result }
+    } else {
+        return { status: 0 }
     }
-    return { status: 0 }
 }
 async function getUserDashboardData(user) {
-    const doc = await dbInstance.getData('users');
-    if (doc) {
-        const agg = [
-            {
-                '$lookup': {
-                    'from': 'urls',
-                    'localField': 'username',
-                    'foreignField': 'user',
-                    'as': 'urls_data'
-                }
-            }, {
-                '$lookup': {
-                    'from': 'webdata',
-                    'localField': 'urls_data.keyword',
-                    'foreignField': 'keyword',
-                    'as': 'webdata'
-                }
-            }, {
-                '$match': {
-                    'username': user.username
-                }
+    const agg = [
+        {
+            '$lookup': {
+                'from': 'urls',
+                'localField': 'username',
+                'foreignField': 'user',
+                'as': 'urls_data'
             }
-        ]
-        const result = await doc.aggregate(agg)
-        return { status: 1, data: result[0] }
-    }
-    return { status: 0 }
+        }, {
+            '$lookup': {
+                'from': 'views',
+                'localField': 'urls_data.keyword',
+                'foreignField': 'keyword',
+                'as': 'webdata'
+            }
+        }, {
+            '$match': {
+                'username': user.username
+            }
+        }
+    ]
+    result = await users.aggregate(agg);
+    if(result) return { status: 1, data: result }
+    else return { status: 0, message: 'EMPTY' }
 }
 async function deleteUrl(keyword) {
     try {
@@ -87,7 +84,7 @@ async function insertUrl(data) {
 async function verifyKeyword(keyword) {
     try {
         const result = await urls.findOne({ keyword })
-        if (result) return { status: 1 }
+        if (result) return { status: 1, result }
         else return { status: 0 }
     } catch (error) {
         return errorResponse(error)
@@ -126,11 +123,12 @@ async function updatePassword(user, oldPassword, newPassword) {
     try {
         const username = user?.username
         const result = await users.findOne({ username })
+        console.log(result)
         if (result) {
             const password = result.password;
             if (await ComparePassword(oldPassword, password)) {
                 const newHashedPassword = await EncryptPassword(newPassword)
-                await users.update({ username }, { password: newHashedPassword })
+                await users.updateOne({ username }, { password: newHashedPassword })
                 return { status: 1 }
             } else { return { status: 0, message: 'INVALID_PASSWORD' } }
         }
