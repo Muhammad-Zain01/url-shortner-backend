@@ -1,14 +1,12 @@
-const dbInstance = require('../utils/database')
-
+const { views } = require('../db/schema')
+const { errorResponse } = require('../utils/helper');
 async function captureUser(data) {
-    const doc = await dbInstance.addDocument('webdata')
-    if (doc) {
-        const response = await doc.One(data)
-        if (response.acknowledged) {
-            return { status: 1 }
-        }
+    try {
+        await views.create(data)
+        return { status: 1 }
+    } catch (error) {
+        return errorResponse(error)
     }
-    return { status: 0 }
 }
 module.exports = {
     captureUser,
