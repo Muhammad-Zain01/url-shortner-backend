@@ -27,6 +27,12 @@
 [![Product Name Screen Shot][product-screenshot]](https://url-shortr.vercel.app/)
 [![Product Name Screen Shot][product-screenshot2]](https://url-shortr.vercel.app/)
 
+### Credentials for Testing
+
+| Username | Password     |
+|----------|--------------|
+| test    | test123  |
+
 ### Built With
 
 <!-- * [![Next][Next.js]][Next-url] -->
