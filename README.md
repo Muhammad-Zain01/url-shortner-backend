@@ -26,7 +26,8 @@
 </div>
 
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](https://url-shortr.vercel.app/)
+[![Product Name Screen Shot][product-screenshot2]](https://url-shortr.vercel.app/)
 
 ### Built With
 
@@ -96,7 +97,8 @@ Don't forget to give the project a star! Thanks again!
 [license-url]: https://github.com/muhammad-zain01/url-shortner-backend/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: https://raw.githubusercontent.com/Muhammad-Zain01/url-shortner-backend/main/preview.png
+[product-screenshot]: https://raw.githubusercontent.com/Muhammad-Zain01/url-shortner/main/preview.png
+[product-screenshot2]: https://raw.githubusercontent.com/Muhammad-Zain01/url-shortner/main/preview2.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 
 [Express.js]: https://img.shields.io/badge/express.js-f1dd1c?style=for-the-badge
