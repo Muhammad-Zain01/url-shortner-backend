@@ -64,7 +64,11 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    npm install
    ```
-3. For Starting Server
+3. Setup .env File
+    ```sh
+    MONGO_DB_URL=MONGO_URI
+    ```  
+4. For Starting Server
    ```sh
    npm start
    ```
