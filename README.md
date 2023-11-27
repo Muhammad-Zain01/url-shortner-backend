@@ -15,11 +15,9 @@
     <a href="https://github.com/muhammad-zain01/url-shortner-backend"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://muhammad-zain01.github.io/url-shortner-backend/">View Demo</a>
+    <a href="https://url-shortr.vercel.app/">View Demo</a>
     -
     <a href="https://github.com/Muhammad-Zain01/url-shortner">Frontend Repo</a>
-    -
-    <a href="https://github.com/muhammad-zain01/url-shortner-backend/issues">Request Feature</a>
     <br />
     <br />
     <br />
