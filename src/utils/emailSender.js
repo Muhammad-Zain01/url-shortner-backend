@@ -349,4 +349,5 @@ class EmailSender {
     }
 }
 
-module.exports = EmailSender
+const Email = new EmailSender();
+module.exports = Email
