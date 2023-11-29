@@ -61,7 +61,7 @@ async function getUserDashboardData(user) {
         }
     ]
     result = await users.aggregate(agg);
-    if(result) return { status: 1, data: result }
+    if (result) return { status: 1, data: result }
     else return { status: 0, message: 'EMPTY' }
 }
 async function deleteUrl(keyword) {
@@ -123,7 +123,6 @@ async function updatePassword(user, oldPassword, newPassword) {
     try {
         const username = user?.username
         const result = await users.findOne({ username })
-        console.log(result)
         if (result) {
             const password = result.password;
             if (await ComparePassword(oldPassword, password)) {
@@ -138,7 +137,25 @@ async function updatePassword(user, oldPassword, newPassword) {
         return errorResponse(error)
     }
 }
+async function verifyUser(code, user) {
+    try {
+        const result = await users.findOne({ username: user })
+        if (result) {
+            if (result.verificationCode == code) {
+                await users.updateOne({ username: user }, { isVerified: true })
+                return { status: 1 }
+            } else {
+                return { status: 0, message: 'INVALID_CODE' }
+            }
+        } else {
+            return { status: 0, message: "INVALID_USER" }
+        }
+    } catch (error) {
+        return errorResponse(error)
+    }
+}
 module.exports = {
+    verifyUser,
     getUrls,
     insertUrl,
     verifyKeyword,

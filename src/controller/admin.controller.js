@@ -9,7 +9,8 @@ const {
     getUserDashboardData,
     updateDisplayName,
     getUser,
-    updatePassword
+    updatePassword,
+    verifyUser
 } = require('../model/admin.modal')
 
 async function httpGetData(req, res) {
@@ -77,7 +78,16 @@ async function httpUpdatePassword(req, res) {
     const result = await updatePassword(user, currentPassword, newPassword);
     res.json(result);
 }
+async function httpVerification(req, res) {
+    const body = req.body;
+    const user = body?.user;
+    const username = user.username
+    const code = body?.code;
+    const result = await verifyUser(code, username);
+    res.json(result);
+}
 module.exports = {
+    httpVerification,
     httpGetData,
     httpDashboardData,
     httpRemoveUrl,
