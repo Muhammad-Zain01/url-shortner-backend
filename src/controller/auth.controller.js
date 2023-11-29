@@ -1,5 +1,4 @@
 const { isUserNameAvailable, registerUser, authenticateUser } = require('../model/auth.model');
-
 async function httpVerifyUsername(req, res) {
     const username = req.params.username;
     res.json(await isUserNameAvailable(username))
