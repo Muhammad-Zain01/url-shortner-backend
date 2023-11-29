@@ -1,6 +1,7 @@
 const { EncryptPassword, ComparePassword, errorResponse, generateVerificationCode } = require('../utils/helper')
 const { users } = require('../db/schema')
-const Email = require('../utils/emailSender')
+const Email = require('../utils/emailSender');
+const { Encode } = require('../utils/jwt')
 async function isUserNameAvailable(username) {
     try {
         const result = await users.findOne({ username })
@@ -37,14 +38,14 @@ async function authenticateUser(username, password) {
         if (result) {
             const isCorrectPassword = await ComparePassword(password, result.password)
             if (isCorrectPassword) {
-                const token = Buffer.from(result._id.toHexString(), 'hex').toString('base64');
+                const data = {
+                    username: result.username,
+                    email: result.email,
+                };
+                const token = Encode(data);
                 return {
                     status: 1,
-                    data: {
-                        username: result.username,
-                        email: result.email,
-                        token
-                    }
+                    data: { token }
                 }
             } else {
                 return {
