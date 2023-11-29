@@ -21,7 +21,7 @@ class EmailSender {
                         "Charset": "utf-8"
                     }
                 ],
-                From: `Url Shortner <${this.sender}>`,
+                From: `URL Shortner <${this.sender}>`,
                 Subject: subject,
             }
         });
