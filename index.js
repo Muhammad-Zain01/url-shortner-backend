@@ -11,5 +11,4 @@ async function startServer() {
     })
 }
 
-startServer() // Starting a Server
-
+startServer() 
