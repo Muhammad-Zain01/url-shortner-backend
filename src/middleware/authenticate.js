@@ -1,20 +1,22 @@
 const { users } = require('../db/schema')
+const { Decode } = require('../utils/jwt')
 const AuthenticateUser = async (req, res, next) => {
-    const body = req.body;
-    const user = body?.user;
-    const username = user?.username;
-    const token = user?.token;
-    const result = await users.findOne({ username })
-    if (result) {
-        const user_id = Buffer.from(result._id.toHexString(), 'hex').toString('base64');
-        if (user_id == token) {
-            return next();
-        } else {
-            return res.json({ status: 0, message: 'INVALID_TOKEN' })
+    const header = req.headers
+    const bearerToken = header.authorization
+    if (bearerToken) {
+        const bearer = bearerToken.split(' ');
+        const token = bearer[1];
+        const userData = Decode(token);
+        if (userData) {
+            const username = userData.username;
+            req.body.user = { username }
+            const result = await users.findOne({ username })
+            if (result) {
+                return next();
+            }
         }
-    }else{
-        return res.json({status: 0, message: 'INVALID_USER'})
     }
+    return res.json({ status: 0, message: 'INVALID_TOKEN' })
 }
 
 module.exports = AuthenticateUser
