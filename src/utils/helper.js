@@ -37,5 +37,9 @@ function joinUrl(baseUrl) {
     }
     return baseUrl;
 }
-
-module.exports = { makeKeyword, joinUrl, EncryptPassword, ComparePassword, errorResponse }
+function generateVerificationCode() {
+    let code = Math.floor(Math.random() * 1000000);
+    code = String(code).padStart(6, '0');
+    return code;
+}
+module.exports = { makeKeyword, joinUrl, EncryptPassword, ComparePassword, errorResponse, generateVerificationCode }
