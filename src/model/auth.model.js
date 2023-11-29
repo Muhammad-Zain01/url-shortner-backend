@@ -1,6 +1,6 @@
-const { EncryptPassword, ComparePassword, errorResponse } = require('../utils/helper')
+const { EncryptPassword, ComparePassword, errorResponse, generateVerificationCode } = require('../utils/helper')
 const { users } = require('../db/schema')
-
+const Email = require('../utils/emailSender')
 async function isUserNameAvailable(username) {
     try {
         const result = await users.findOne({ username })
@@ -14,7 +14,18 @@ async function registerUser(username, email, pass) {
     try {
         const displayName = username
         const password = await EncryptPassword(pass)
-        await users.create({ username, email, password, displayName })
+        const isVerified = false;
+        const verificationCode = generateVerificationCode();
+        const user = {
+            username,
+            email,
+            password,
+            displayName,
+            isVerified,
+            verificationCode
+        }
+        await users.create(user)
+        await Email.SendVerificationEmail(email, displayName, verificationCode)
         return { status: 1 }
     } catch (error) {
         return errorResponse(error)
