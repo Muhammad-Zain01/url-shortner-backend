@@ -1,7 +1,7 @@
 const { EncryptPassword, ComparePassword, errorResponse, generateVerificationCode } = require('../utils/helper')
 const { users } = require('../db/schema')
 const Email = require('../utils/emailSender');
-const { Encode } = require('../utils/jwt')
+const { Encode, Decode } = require('../utils/jwt')
 async function isUserNameAvailable(username) {
     try {
         const result = await users.findOne({ username })
@@ -62,8 +62,54 @@ async function authenticateUser(username, password) {
         return errorResponse(error)
     }
 }
+async function ForgotPasswordEmailVerfication(username) {
+    try {
+        const result = await users.findOne({ username })
+        if (result) {
+            const email = result.email;
+            const displayName = result.displayName;
+            const verificationCode = generateVerificationCode();
+            await users.updateOne({ username }, { verificationCode })
+            await Email.SendVerificationEmail(email, displayName, verificationCode)
+            const token = Encode({ username })
+            return { status: 1, token }
+        } else {
+            return { status: 0, message: 'INVALID_USER' }
+        }
+    } catch (error) {
+        return errorResponse(error)
+    }
+}
+async function ResetCode(token, code) {
+    try {
+        const data = Decode(token)
+        if (data) {
+            const { username } = data
+            const result = await users.findOne({ username })
+            if (result) {
+                if (result.verificationCode == code) {
+                    const newPassword = generateVerificationCode();
+                    const email = result.email;
+                    const displayName = result.displayName;
+                    const newHashedPassword = await EncryptPassword(newPassword)
+                    await users.updateOne({ username }, { password: newHashedPassword })
+                    await Email.PasswordResetEmail(email, displayName, newPassword)
+                    return { status: 1 }
+                } else {
+                    return { status: 0, message: 'INVALID_CODE' }
+                }
+            }
+        } else {
+            return { status: 0, message: 'INVALID_TOKEN' }
+        }
+    } catch (error) {
+        return errorResponse(error)
+    }
+}
 
 module.exports = {
+    ResetCode,
+    ForgotPasswordEmailVerfication,
     isUserNameAvailable,
     registerUser,
     authenticateUser
