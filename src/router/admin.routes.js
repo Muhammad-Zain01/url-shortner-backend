@@ -14,5 +14,6 @@ AdminRoutes.post('/events/get-display-name', AdminController.httpDisplayName)
 AdminRoutes.post('/events/update-password', AdminController.httpUpdatePassword)
 AdminRoutes.post('/events/set-display-name', AdminController.httpUpdateDisplayName)
 AdminRoutes.post('/events/verify-user', AdminController.httpVerification)
+AdminRoutes.post('/events/resend-email', AdminController.httpResendEmail)
 
 module.exports = AdminRoutes;
