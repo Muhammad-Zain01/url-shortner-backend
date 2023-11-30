@@ -10,7 +10,8 @@ const {
     updateDisplayName,
     getUser,
     updatePassword,
-    verifyUser
+    verifyUser,
+    resendCode
 } = require('../model/admin.modal')
 
 async function httpGetData(req, res) {
@@ -86,7 +87,15 @@ async function httpVerification(req, res) {
     const result = await verifyUser(code, username);
     res.json(result);
 }
+async function httpResendEmail(req, res) {
+    const body = req.body;
+    const user = body?.user;
+    const username = user.username
+    const result = await resendCode(username);
+    res.json(result);
+}
 module.exports = {
+    httpResendEmail,
     httpVerification,
     httpGetData,
     httpDashboardData,
