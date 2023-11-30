@@ -1,6 +1,6 @@
 const { urls, users, views } = require('../db/schema')
-const { EncryptPassword, ComparePassword, errorResponse } = require('../utils/helper')
-
+const { EncryptPassword, ComparePassword, errorResponse, generateVerificationCode } = require('../utils/helper')
+const Email = require('../utils/emailSender')
 async function getUrls(user) {
     const agg = [
         {
@@ -154,7 +154,25 @@ async function verifyUser(code, user) {
         return errorResponse(error)
     }
 }
+async function resendCode(username) {
+    try {
+        const result = await users.findOne({ username })
+        if (result) {
+            const verificationCode = generateVerificationCode();
+            const email = result.email
+            const displayName = result.displayName
+            await users.updateOne({ username }, { verificationCode })
+            await Email.SendVerificationEmail(email, displayName, verificationCode)
+            return { status: 1 }
+        } else {
+            return { status: 0, message: "INVALID_USER" }
+        }
+    } catch (error) {
+        return errorResponse(error)
+    }
+}
 module.exports = {
+    resendCode,
     verifyUser,
     getUrls,
     insertUrl,
