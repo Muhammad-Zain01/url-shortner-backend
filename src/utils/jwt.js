@@ -5,7 +5,7 @@ function Encode(data) {
         const result = jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '30d' });
         return result;
     } catch (error) {
-        return false;
+        return error;
     }
 }
 function Decode(token) {
@@ -13,7 +13,7 @@ function Decode(token) {
         const result = jwt.verify(token, process.env.SECRET_KEY);
         return result
     } catch (error) {
-        return false;
+        return error;
     }
 }
 
