@@ -25,6 +25,7 @@ async function httpProxyMiddleware(req, res) {
     if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) { targetUrl = 'https://' + targetUrl }
     try {
         const response = await axios.get(targetUrl, {
+            timeout: 6000,
             headers: { 'User-Agent': 'CORS Proxy Server' },
             responseType: 'text'
         });
