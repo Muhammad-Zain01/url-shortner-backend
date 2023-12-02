@@ -18,7 +18,7 @@ async function httpCaptureUser(req, res) {
 }
 
 async function httpProxyMiddleware(req, res) {
-    let targetUrl = req.params.url;
+    let targetUrl = req.query.url;
     if (!targetUrl) {
         return res.status(400).json({ error: 'URL parameter is required.' });
     }
